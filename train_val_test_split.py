@@ -13,9 +13,14 @@ import sys
 
 # Define paths to image folders
 image_path = '/kaggle/input/vehicle-detection'
-train_path = '/images/train'
-val_path = '/images/validation'
-test_path = '/images/test'
+train_path = '/kaggle/working/images/train'
+val_path = '/kaggle/working/images/validation'
+test_path = '/kaggle/working/images/test'
+
+# Create the directories if they do not exist
+os.makedirs(train_path, exist_ok=True)
+os.makedirs(val_path, exist_ok=True)
+os.makedirs(test_path, exist_ok=True)
 
 # Get list of all images
 jpeg_file_list = [path for path in Path(image_path).rglob('*.jpeg')]
@@ -37,8 +42,8 @@ print('Total images: %d' % file_num)
 train_percent = 0.8  # 80% of the files go to train
 val_percent = 0.1 # 10% go to validation
 test_percent = 0.1 # 10% go to test
-train_num = int(file_num*train_percent)
-val_num = int(file_num*val_percent)
+train_num = int(file_num * train_percent)
+val_num = int(file_num * val_percent)
 test_num = file_num - train_num - val_num
 print('Images moving to train: %d' % train_num)
 print('Images moving to validation: %d' % val_num)
@@ -51,8 +56,8 @@ for i in range(train_num):
     base_fn = move_me.stem
     parent_path = move_me.parent
     xml_fn = base_fn + '.xml'
-    os.rename(move_me, train_path+'/'+fn)
-    os.rename(os.path.join(parent_path,xml_fn),os.path.join(train_path,xml_fn))
+    os.rename(move_me, os.path.join(train_path, fn))
+    os.rename(os.path.join(parent_path, xml_fn), os.path.join(train_path, xml_fn))
     file_list.remove(move_me)
 
 # Select 10% of remaining files and move them to validation folder
@@ -62,8 +67,8 @@ for i in range(val_num):
     base_fn = move_me.stem
     parent_path = move_me.parent
     xml_fn = base_fn + '.xml'
-    os.rename(move_me, val_path+'/'+fn)
-    os.rename(os.path.join(parent_path,xml_fn),os.path.join(val_path,xml_fn))
+    os.rename(move_me, os.path.join(val_path, fn))
+    os.rename(os.path.join(parent_path, xml_fn), os.path.join(val_path, xml_fn))
     file_list.remove(move_me)
 
 # Move remaining files to test folder
@@ -73,6 +78,6 @@ for i in range(test_num):
     base_fn = move_me.stem
     parent_path = move_me.parent
     xml_fn = base_fn + '.xml'
-    os.rename(move_me, test_path+'/'+fn)
-    os.rename(os.path.join(parent_path,xml_fn),os.path.join(test_path,xml_fn))
+    os.rename(move_me, os.path.join(test_path, fn))
+    os.rename(os.path.join(parent_path, xml_fn), os.path.join(test_path, xml_fn))
     file_list.remove(move_me)
