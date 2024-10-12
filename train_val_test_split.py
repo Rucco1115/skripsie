@@ -9,6 +9,7 @@
 from pathlib import Path
 import random
 import os
+import shutil
 import sys
 
 # Define paths to image folders
@@ -17,7 +18,7 @@ train_path = '/kaggle/working/images/train'
 val_path = '/kaggle/working/images/validation'
 test_path = '/kaggle/working/images/test'
 
-# Create the directories if they do not exist
+# Create target directories if they do not exist
 os.makedirs(train_path, exist_ok=True)
 os.makedirs(val_path, exist_ok=True)
 os.makedirs(test_path, exist_ok=True)
@@ -38,10 +39,10 @@ else:
 file_num = len(file_list)
 print('Total images: %d' % file_num)
 
-# Determine number of files to move to each folder
+# Determine number of files to copy to each folder
 train_percent = 0.8  # 80% of the files go to train
-val_percent = 0.1 # 10% go to validation
-test_percent = 0.1 # 10% go to test
+val_percent = 0.1  # 10% go to validation
+test_percent = 0.1  # 10% go to test
 train_num = int(file_num * train_percent)
 val_num = int(file_num * val_percent)
 test_num = file_num - train_num - val_num
@@ -49,35 +50,35 @@ print('Images moving to train: %d' % train_num)
 print('Images moving to validation: %d' % val_num)
 print('Images moving to test: %d' % test_num)
 
-# Select 80% of files randomly and move them to train folder
+# Select 80% of files randomly and copy them to train folder
 for i in range(train_num):
-    move_me = random.choice(file_list)
-    fn = move_me.name
-    base_fn = move_me.stem
-    parent_path = move_me.parent
+    copy_me = random.choice(file_list)
+    fn = copy_me.name
+    base_fn = copy_me.stem
+    parent_path = copy_me.parent
     xml_fn = base_fn + '.xml'
-    os.rename(move_me, os.path.join(train_path, fn))
-    os.rename(os.path.join(parent_path, xml_fn), os.path.join(train_path, xml_fn))
-    file_list.remove(move_me)
+    shutil.copy2(copy_me, os.path.join(train_path, fn))
+    shutil.copy2(os.path.join(parent_path, xml_fn), os.path.join(train_path, xml_fn))
+    file_list.remove(copy_me)
 
-# Select 10% of remaining files and move them to validation folder
+# Select 10% of remaining files and copy them to validation folder
 for i in range(val_num):
-    move_me = random.choice(file_list)
-    fn = move_me.name
-    base_fn = move_me.stem
-    parent_path = move_me.parent
+    copy_me = random.choice(file_list)
+    fn = copy_me.name
+    base_fn = copy_me.stem
+    parent_path = copy_me.parent
     xml_fn = base_fn + '.xml'
-    os.rename(move_me, os.path.join(val_path, fn))
-    os.rename(os.path.join(parent_path, xml_fn), os.path.join(val_path, xml_fn))
-    file_list.remove(move_me)
+    shutil.copy2(copy_me, os.path.join(val_path, fn))
+    shutil.copy2(os.path.join(parent_path, xml_fn), os.path.join(val_path, xml_fn))
+    file_list.remove(copy_me)
 
-# Move remaining files to test folder
+# Copy remaining files to test folder
 for i in range(test_num):
-    move_me = random.choice(file_list)
-    fn = move_me.name
-    base_fn = move_me.stem
-    parent_path = move_me.parent
+    copy_me = random.choice(file_list)
+    fn = copy_me.name
+    base_fn = copy_me.stem
+    parent_path = copy_me.parent
     xml_fn = base_fn + '.xml'
-    os.rename(move_me, os.path.join(test_path, fn))
-    os.rename(os.path.join(parent_path, xml_fn), os.path.join(test_path, xml_fn))
-    file_list.remove(move_me)
+    shutil.copy2(copy_me, os.path.join(test_path, fn))
+    shutil.copy2(os.path.join(parent_path, xml_fn), os.path.join(test_path, xml_fn))
+    file_list.remove(copy_me)
