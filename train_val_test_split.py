@@ -13,7 +13,7 @@ import shutil
 import sys
 
 # Define paths to image folders
-image_path = '/kaggle/input/vehicle-detection-2'
+image_path = '/kaggle/input/vehicle-detection-3'
 train_path = '/kaggle/working/images/train'
 val_path = '/kaggle/working/images/validation'
 test_path = '/kaggle/working/images/test'
